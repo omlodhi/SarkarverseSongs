@@ -1,0 +1,35 @@
+{
+	"@metadata": {
+		"authors": [
+			"Your Name"
+		]
+	},
+	"sarkarversesong-desc": "Provides a parser function for storing and displaying Sarkarverse song information",
+	"sarkarversesongs": "Sarkarverse Songs",
+	"sarkarversesong-filter-year": "Year:",
+	"sarkarversesong-filter-category": "Category:",
+	"sarkarversesong-filter-theme": "Theme:",
+	"sarkarversesong-filter-language": "Language:",
+	"sarkarversesong-filter-submit": "Filter",
+	"sarkarversesong-all-years": "All years",
+	"sarkarversesong-all-categories": "All categories",
+	"sarkarversesong-all-themes": "All themes",
+	"sarkarversesong-all-languages": "All languages",
+	"sarkarversesong-showing": "Showing $1 of $2 songs",
+	"sarkarversesong-no-songs": "No songs found matching the selected filters.",
+	"sarkarversesong-col-number": "Number",
+	"sarkarversesong-col-date": "Date",
+	"sarkarversesong-col-title": "First line(s)",
+	"sarkarversesong-col-theme": "Theme",
+	"sarkarversesong-col-language": "Language",
+	"sarkarversesong-col-music": "Music",
+	"sarkarversesong-prev": "Previous",
+	"sarkarversesong-next": "Next",
+	"sarkarversesong-page-info": "Page $1 of $2",
+	"apihelp-sarkarversesongs-summary": "Get a list of Sarkarverse songs with optional filtering.",
+	"apihelp-sarkarversesongs-example-1": "Get all songs",
+	"apihelp-sarkarversesongs-example-2": "Get songs with Enlightenment theme",
+	"apihelp-sarkarversesongs-example-3": "Get first 10 Bengali songs",
+	"apihelp-sarkarversesongs-example-4": "Get songs in a specific category",
+	"apihelp-sarkarversesongs-example-5": "Get songs from 1982"
+}

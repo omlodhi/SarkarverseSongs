@@ -1,0 +1,76 @@
+/* Filter form styles */
+.sarkarverse-filter-form {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1em;
+	align-items: flex-end;
+	margin-bottom: 1em;
+	padding: 1em;
+	background: #f8f9fa;
+	border: 1px solid #a2a9b1;
+	border-radius: 2px;
+}
+
+.sarkarverse-filter-group {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25em;
+}
+
+.sarkarverse-filter-group label {
+	font-weight: bold;
+	font-size: 0.9em;
+}
+
+.sarkarverse-filter-group select {
+	min-width: 150px;
+	padding: 0.5em;
+}
+
+.sarkarverse-filter-submit {
+	padding: 0.5em 1em;
+}
+
+/* Songs table styles */
+.sarkarverse-songs-table {
+	width: 100%;
+	margin-top: 1em;
+}
+
+.sarkarverse-songs-count {
+	font-weight: bold;
+	color: #54595d;
+}
+
+.sarkarverse-no-songs {
+	font-style: italic;
+	color: #72777d;
+}
+
+/* Pagination styles */
+.sarkarverse-pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 1em;
+	margin-top: 1em;
+	padding: 1em;
+}
+
+.sarkarverse-pagination-info {
+	color: #54595d;
+}
+
+.sarkarverse-pagination-prev,
+.sarkarverse-pagination-next {
+	padding: 0.5em 1em;
+	background: #f8f9fa;
+	border: 1px solid #a2a9b1;
+	border-radius: 2px;
+	text-decoration: none;
+}
+
+.sarkarverse-pagination-prev:hover,
+.sarkarverse-pagination-next:hover {
+	background: #eaecf0;
+}

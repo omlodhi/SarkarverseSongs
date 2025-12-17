@@ -1,0 +1,29 @@
+/* Dashboard-specific styles */
+.sarkarverse-dashboard-container {
+	max-width: 100%;
+}
+
+.sarkarverse-songs-table th {
+	background: #eaecf0;
+	white-space: nowrap;
+}
+
+.sarkarverse-songs-table td {
+	vertical-align: middle;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+	.sarkarverse-filter-form {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.sarkarverse-filter-group select {
+		width: 100%;
+	}
+
+	.sarkarverse-songs-table {
+		font-size: 0.9em;
+	}
+}

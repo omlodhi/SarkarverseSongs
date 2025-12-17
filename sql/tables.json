@@ -1,0 +1,108 @@
+[
+	{
+		"name": "sarkarverse_songs",
+		"columns": [
+			{
+				"name": "song_id",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true, "autoincrement": true }
+			},
+			{
+				"name": "song_number",
+				"type": "string",
+				"options": { "length": 10, "notnull": true }
+			},
+			{
+				"name": "song_date",
+				"type": "string",
+				"options": { "length": 20, "notnull": true }
+			},
+			{
+				"name": "song_title",
+				"type": "string",
+				"options": { "length": 255, "notnull": true }
+			},
+			{
+				"name": "song_theme",
+				"type": "string",
+				"options": { "length": 255, "notnull": true }
+			},
+			{
+				"name": "song_language",
+				"type": "string",
+				"options": { "length": 100, "notnull": true }
+			},
+			{
+				"name": "song_music",
+				"type": "string",
+				"options": { "length": 255, "notnull": true }
+			},
+			{
+				"name": "song_page_id",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true }
+			},
+			{
+				"name": "song_page_title",
+				"type": "string",
+				"options": { "length": 255, "notnull": true }
+			}
+		],
+		"indexes": [
+			{
+				"name": "idx_song_number",
+				"columns": [ "song_number" ],
+				"unique": true
+			},
+			{
+				"name": "idx_song_theme",
+				"columns": [ "song_theme" ]
+			},
+			{
+				"name": "idx_song_language",
+				"columns": [ "song_language" ]
+			},
+			{
+				"name": "idx_song_page_id",
+				"columns": [ "song_page_id" ]
+			}
+		],
+		"pk": [ "song_id" ]
+	},
+	{
+		"name": "sarkarverse_song_categories",
+		"columns": [
+			{
+				"name": "ssc_id",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true, "autoincrement": true }
+			},
+			{
+				"name": "ssc_song_number",
+				"type": "string",
+				"options": { "length": 10, "notnull": true }
+			},
+			{
+				"name": "ssc_category",
+				"type": "string",
+				"options": { "length": 255, "notnull": true }
+			}
+		],
+		"indexes": [
+			{
+				"name": "idx_ssc_song_number",
+				"columns": [ "ssc_song_number" ]
+			},
+			{
+				"name": "idx_ssc_category",
+				"columns": [ "ssc_category" ]
+			},
+			{
+				"name": "idx_ssc_unique",
+				"columns": [ "ssc_song_number", "ssc_category" ],
+				"unique": true
+			}
+		],
+		"pk": [ "ssc_id" ]
+	}
+]

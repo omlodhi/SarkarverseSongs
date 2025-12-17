@@ -1,0 +1,32 @@
+{
+	"@metadata": {
+		"authors": [
+			"Your Name"
+		]
+	},
+	"sarkarversesong-desc": "{{desc|name=SarkarverseSong|url=https://www.mediawiki.org/wiki/Extension:SarkarverseSong}}",
+	"sarkarversesongs": "Name of the special page for listing songs",
+	"sarkarversesong-filter-category": "Label for category filter dropdown (categories from individual song pages)",
+	"sarkarversesong-filter-theme": "Label for theme filter dropdown",
+	"sarkarversesong-filter-language": "Label for language filter dropdown",
+	"sarkarversesong-filter-submit": "Text for filter submit button",
+	"sarkarversesong-all-categories": "Option text for showing all categories",
+	"sarkarversesong-all-themes": "Option text for showing all themes",
+	"sarkarversesong-all-languages": "Option text for showing all languages",
+	"sarkarversesong-showing": "Text showing count of displayed songs. $1 is count shown, $2 is total count.",
+	"sarkarversesong-no-songs": "Message shown when no songs match filters",
+	"sarkarversesong-col-number": "Column header for song number",
+	"sarkarversesong-col-date": "Column header for song date",
+	"sarkarversesong-col-title": "Column header for song title/first line",
+	"sarkarversesong-col-theme": "Column header for song theme",
+	"sarkarversesong-col-language": "Column header for song language",
+	"sarkarversesong-col-music": "Column header for music information",
+	"sarkarversesong-prev": "Text for previous page link",
+	"sarkarversesong-next": "Text for next page link",
+	"sarkarversesong-page-info": "Pagination info text. $1 is current page, $2 is total pages.",
+	"apihelp-sarkarversesongs-summary": "{{apihelp|summary}}",
+	"apihelp-sarkarversesongs-example-1": "{{apihelp|example}}",
+	"apihelp-sarkarversesongs-example-2": "{{apihelp|example}}",
+	"apihelp-sarkarversesongs-example-3": "{{apihelp|example}}",
+	"apihelp-sarkarversesongs-example-4": "{{apihelp|example}}"
+}

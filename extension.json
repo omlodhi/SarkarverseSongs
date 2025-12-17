@@ -1,0 +1,83 @@
+{
+	"name": "SarkarverseSong",
+	"version": "1.0.0",
+	"author": [
+		"Om Prakash"
+	],
+	"url": "https://www.mediawiki.org/wiki/Extension:SarkarverseSong",
+	"descriptionmsg": "sarkarversesong-desc",
+	"license-name": "GPL-2.0-or-later",
+	"type": "parserhook",
+	"requires": {
+		"MediaWiki": ">= 1.44"
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\SarkarverseSong\\": "src/"
+	},
+	"ServiceWiringFiles": [
+		"src/ServiceWiring.php"
+	],
+	"HookHandlers": {
+		"Main": {
+			"class": "MediaWiki\\Extension\\SarkarverseSong\\Hooks",
+			"services": [
+				"SarkarverseSong.SongStore"
+			]
+		},
+		"Schema": {
+			"class": "MediaWiki\\Extension\\SarkarverseSong\\SchemaHooks"
+		}
+	},
+	"Hooks": {
+		"ParserFirstCallInit": "Main",
+		"LoadExtensionSchemaUpdates": "Schema"
+	},
+	"SpecialPages": {
+		"SarkarverseSongs": {
+			"class": "MediaWiki\\Extension\\SarkarverseSong\\Special\\SpecialSarkarverseSongs",
+			"services": [
+				"SarkarverseSong.SongStore"
+			]
+		}
+	},
+	"MessagesDirs": {
+		"SarkarverseSong": [
+			"i18n"
+		]
+	},
+	"ExtensionMessagesFiles": {
+		"SarkarverseSongMagic": "src/SarkarverseSong.i18n.magic.php"
+	},
+	"ResourceModules": {
+		"ext.sarkarversesong.styles": {
+			"styles": [
+				"resources/ext.sarkarversesong.styles.css"
+			]
+		},
+		"ext.sarkarversesong.dashboard": {
+			"scripts": [
+				"resources/ext.sarkarversesong.dashboard.js"
+			],
+			"styles": [
+				"resources/ext.sarkarversesong.dashboard.css"
+			],
+			"dependencies": [
+				"oojs-ui-core",
+				"oojs-ui-widgets"
+			]
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "",
+		"remoteExtPath": "SarkarverseSong"
+	},
+	"APIModules": {
+		"sarkarversesongs": {
+			"class": "MediaWiki\\Extension\\SarkarverseSong\\Api\\ApiSarkarverseSongs",
+			"services": [
+				"SarkarverseSong.SongStore"
+			]
+		}
+	},
+	"manifest_version": 2
+}

@@ -1,6 +1,6 @@
 # SarkarverseSongs
 
-A MediaWiki extension that provides a parser function for storing and displaying Sarkarverse song information with a searchable dashboard and API.
+A MediaWiki extension that provides parser functions for storing and displaying Sarkarverse song information with a searchable dashboard and API.
 
 ## Requirements
 
@@ -26,17 +26,17 @@ A MediaWiki extension that provides a parser function for storing and displaying
 
 ## Features
 
-### Parser Function
+### Parser Functions
 
-The extension provides a `{{#song:}}` parser function to define songs on wiki pages. Use it in a table format:
+#### `{{#song:}}`
+
+Defines a song entry inside a wikitable. Use on a data page containing all songs:
 
 ```wikitext
 {| class="wikitable"
 |-
 ! Number !! Date !! First line(s) !! Theme !! Language !! Music
-|-
 {{#song:0001|1982 September 14|Bandhu he niye calo|Longing for the Great|Bengali|Dadra}}
-|-
 {{#song:0002|1982 September 14|E path jadi na shes hay|Determination|Bengali|Kaharva}}
 |}
 ```
@@ -50,14 +50,29 @@ The extension provides a `{{#song:}}` parser function to define songs on wiki pa
 6. **Music** - Musical style/rhythm
 
 The parser function automatically:
+- Outputs a wikitable row
 - Stores song data in the database when the page is saved
 - Creates links to individual song pages
 - Fetches and stores categories from linked song pages
 
+#### `{{#songlist:}}`
+
+Displays all songs from the database in a filterable table with client-side category and year filters.
+
+```wikitext
+{{#songlist:categories=Cat1,Cat2,Cat3}}
+```
+
+**Parameters (named):**
+| Parameter | Description |
+|-----------|-------------|
+| `categories` | Comma-separated list of categories to show in the category filter dropdown |
+
 ### Special Page
 
-Access `Special:SarkarverseSongs` to browse all songs with filtering options:
+Access `Special:SarkarverseSongs` to browse all songs with server-side filtering and pagination:
 
+- **Year filter** - Filter by year of composition
 - **Category filter** - Filter by categories from individual song pages
 - **Theme filter** - Filter by song theme
 - **Language filter** - Filter by language
@@ -77,8 +92,10 @@ api.php?action=sarkarversesongs
 | `theme` | string | null | Filter by theme |
 | `language` | string | null | Filter by language |
 | `category` | string | null | Filter by category |
+| `year` | string | null | Filter by year |
 | `limit` | integer | 50 | Number of results (1-500) |
 | `offset` | integer | 0 | Offset for pagination |
+| `include_filters` | boolean | false | Include available filter options in response |
 
 **Examples:**
 
@@ -86,22 +103,28 @@ api.php?action=sarkarversesongs
 # Get all songs
 api.php?action=sarkarversesongs
 
+# Get songs from 1982
+api.php?action=sarkarversesongs&year=1982
+
 # Get songs with "Enlightenment" theme
 api.php?action=sarkarversesongs&theme=Enlightenment
 
 # Get first 10 Bengali songs
 api.php?action=sarkarversesongs&language=Bengali&limit=10
 
-# Get songs in a specific category
-api.php?action=sarkarversesongs&category=Prabhat%20Samgiita
+# Get songs with filter options
+api.php?action=sarkarversesongs&include_filters=true
 ```
 
 **Response includes:**
 - `total` - Total count of matching songs
 - `songs` - Array of song objects
+
+When `include_filters=true`:
 - `themes` - All available themes
 - `languages` - All available languages
 - `categories` - All available categories
+- `years` - All available years
 
 ## Database Schema
 
@@ -112,6 +135,7 @@ Stores song metadata:
 - `song_id` - Primary key
 - `song_number` - Unique song identifier
 - `song_date` - Composition date
+- `song_year` - Year extracted from date (indexed for efficient filtering)
 - `song_title` - First line(s) / title
 - `song_theme` - Theme
 - `song_language` - Language

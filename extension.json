@@ -85,7 +85,7 @@
 	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "",
-		"remoteExtPath": "SarkarverseSong"
+		"remoteExtPath": "SarkarverseSongs"
 	},
 	"APIModules": {
 		"sarkarversesongs": {

@@ -19,5 +19,19 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 			'sarkarverse_songs',
 			"$dir/tables-generated.sql"
 		);
+
+		// Add song_year column for efficient year filtering (avoids LIKE queries)
+		$updater->addExtensionField(
+			'sarkarverse_songs',
+			'song_year',
+			"$dir/patch-song_year.sql"
+		);
+
+		// Add index for song_year column
+		$updater->addExtensionIndex(
+			'sarkarverse_songs',
+			'idx_song_year',
+			"$dir/patch-song_year-index.sql"
+		);
 	}
 }

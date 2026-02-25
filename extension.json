@@ -21,7 +21,16 @@
 		"Main": {
 			"class": "MediaWiki\\Extension\\SarkarverseSong\\Hooks",
 			"services": [
-				"SarkarverseSong.SongStore"
+				"SarkarverseSong.SongStore",
+				"LinkBatchFactory"
+			]
+		},
+		"LinksUpdate": {
+			"class": "MediaWiki\\Extension\\SarkarverseSong\\LinksUpdateHooks",
+			"services": [
+				"SarkarverseSong.SongStore",
+				"ConnectionProvider",
+				"LinkBatchFactory"
 			]
 		},
 		"Schema": {
@@ -30,13 +39,15 @@
 	},
 	"Hooks": {
 		"ParserFirstCallInit": "Main",
+		"LinksUpdateComplete": "LinksUpdate",
 		"LoadExtensionSchemaUpdates": "Schema"
 	},
 	"SpecialPages": {
 		"SarkarverseSongs": {
 			"class": "MediaWiki\\Extension\\SarkarverseSong\\Special\\SpecialSarkarverseSongs",
 			"services": [
-				"SarkarverseSong.SongStore"
+				"SarkarverseSong.SongStore",
+				"LinkBatchFactory"
 			]
 		}
 	},
@@ -52,6 +63,11 @@
 		"ext.sarkarversesong.styles": {
 			"styles": [
 				"resources/ext.sarkarversesong.styles.css"
+			]
+		},
+		"ext.sarkarversesong.filter": {
+			"scripts": [
+				"resources/ext.sarkarversesong.filter.js"
 			]
 		},
 		"ext.sarkarversesong.dashboard": {

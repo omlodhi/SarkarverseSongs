@@ -25,6 +25,7 @@ class ApiSarkarverseSongs extends ApiBase {
 		$year = $params['year'] ?? null;
 		$limit = $params['limit'];
 		$offset = $params['offset'];
+		$includeFilters = $params['include_filters'];
 
 		$result = $this->getResult();
 
@@ -35,11 +36,13 @@ class ApiSarkarverseSongs extends ApiBase {
 		$result->addValue( null, 'total', $total );
 		$result->addValue( null, 'songs', $songs );
 
-		// Add available filters
-		$result->addValue( null, 'themes', $this->songStore->getThemes() );
-		$result->addValue( null, 'languages', $this->songStore->getLanguages() );
-		$result->addValue( null, 'categories', $this->songStore->getCategories() );
-		$result->addValue( null, 'years', $this->songStore->getYears() );
+		// Only fetch filter metadata when requested (saves 4 DB queries)
+		if ( $includeFilters ) {
+			$result->addValue( null, 'themes', $this->songStore->getThemes() );
+			$result->addValue( null, 'languages', $this->songStore->getLanguages() );
+			$result->addValue( null, 'categories', $this->songStore->getCategories() );
+			$result->addValue( null, 'years', $this->songStore->getYears() );
+		}
 	}
 
 	/**
@@ -73,6 +76,10 @@ class ApiSarkarverseSongs extends ApiBase {
 				ParamValidator::PARAM_TYPE => 'integer',
 				ParamValidator::PARAM_DEFAULT => 0,
 				IntegerDef::PARAM_MIN => 0,
+			],
+			'include_filters' => [
+				ParamValidator::PARAM_TYPE => 'boolean',
+				ParamValidator::PARAM_DEFAULT => false,
 			],
 		];
 	}

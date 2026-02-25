@@ -3,8 +3,6 @@
 namespace MediaWiki\Extension\SarkarverseSong;
 
 use Wikimedia\Rdbms\IConnectionProvider;
-use Wikimedia\Rdbms\IExpression;
-use Wikimedia\Rdbms\LikeValue;
 
 class SongStore {
 
@@ -15,87 +13,34 @@ class SongStore {
 	}
 
 	/**
-	 * Store a song in the database
+	 * Get categories for multiple songs in a single query
+	 * Returns array keyed by song number: [ 'song_number' => [ 'cat1', 'cat2' ], ... ]
+	 *
+	 * @param array $songNumbers Array of song numbers
+	 * @return array
 	 */
-	public function storeSong(
-		string $number,
-		string $date,
-		string $title,
-		string $theme,
-		string $language,
-		string $music,
-		int $pageId,
-		string $pageTitle
-	): void {
-		$dbw = $this->dbProvider->getPrimaryDatabase();
-
-		$dbw->newReplaceQueryBuilder()
-			->replaceInto( 'sarkarverse_songs' )
-			->uniqueIndexFields( [ 'song_number' ] )
-			->row( [
-				'song_number' => $number,
-				'song_date' => $date,
-				'song_title' => $title,
-				'song_theme' => $theme,
-				'song_language' => $language,
-				'song_music' => $music,
-				'song_page_id' => $pageId,
-				'song_page_title' => $pageTitle,
-			] )
-			->caller( __METHOD__ )
-			->execute();
-	}
-
-	/**
-	 * Store categories for a song (from the individual song page)
-	 */
-	public function storeSongCategories( string $songNumber, array $categories ): void {
-		$dbw = $this->dbProvider->getPrimaryDatabase();
-
-		// Delete existing categories for this song
-		$dbw->newDeleteQueryBuilder()
-			->deleteFrom( 'sarkarverse_song_categories' )
-			->where( [ 'ssc_song_number' => $songNumber ] )
-			->caller( __METHOD__ )
-			->execute();
-
-		// Insert new categories
-		foreach ( $categories as $category ) {
-			$category = trim( $category );
-			if ( $category === '' ) {
-				continue;
-			}
-			$dbw->newInsertQueryBuilder()
-				->insertInto( 'sarkarverse_song_categories' )
-				->row( [
-					'ssc_song_number' => $songNumber,
-					'ssc_category' => $category,
-				] )
-				->caller( __METHOD__ )
-				->execute();
-		}
-	}
-
-	/**
-	 * Get categories for a song
-	 */
-	public function getSongCategories( string $songNumber ): array {
+	public function getAllSongCategories( array $songNumbers = [] ): array {
 		$dbr = $this->dbProvider->getReplicaDatabase();
 
-		$result = $dbr->newSelectQueryBuilder()
-			->select( 'ssc_category' )
+		$queryBuilder = $dbr->newSelectQueryBuilder()
+			->select( [ 'ssc_song_number', 'ssc_category' ] )
 			->from( 'sarkarverse_song_categories' )
-			->where( [ 'ssc_song_number' => $songNumber ] )
-			->orderBy( 'ssc_category', 'ASC' )
-			->caller( __METHOD__ )
-			->fetchResultSet();
+			->orderBy( [ 'ssc_song_number', 'ssc_category' ], 'ASC' )
+			->caller( __METHOD__ );
 
-		$categories = [];
-		foreach ( $result as $row ) {
-			$categories[] = $row->ssc_category;
+		// If specific song numbers provided, filter by them
+		if ( !empty( $songNumbers ) ) {
+			$queryBuilder->where( [ 'ssc_song_number' => $songNumbers ] );
 		}
 
-		return $categories;
+		$result = $queryBuilder->fetchResultSet();
+
+		$categoriesByNumber = [];
+		foreach ( $result as $row ) {
+			$categoriesByNumber[$row->ssc_song_number][] = $row->ssc_category;
+		}
+
+		return $categoriesByNumber;
 	}
 
 	/**
@@ -171,9 +116,9 @@ class SongStore {
 			$queryBuilder->where( [ 'ssc_category' => $category ] );
 		}
 
-		// Filter by year (extracted from song_date)
+		// Filter by year (uses indexed song_year column)
 		if ( $year !== null && $year !== '' ) {
-			$queryBuilder->where( $dbr->expr( 'song_date', IExpression::LIKE, new LikeValue( $dbr->anyString(), $year, $dbr->anyString() ) ) );
+			$queryBuilder->where( [ 'song_year' => $year ] );
 		}
 
 		if ( $limit !== null ) {
@@ -237,9 +182,9 @@ class SongStore {
 			$queryBuilder->where( [ 'ssc_category' => $category ] );
 		}
 
-		// Filter by year (extracted from song_date)
+		// Filter by year (uses indexed song_year column)
 		if ( $year !== null && $year !== '' ) {
-			$queryBuilder->where( $dbr->expr( 'song_date', IExpression::LIKE, new LikeValue( $dbr->anyString(), $year, $dbr->anyString() ) ) );
+			$queryBuilder->where( [ 'song_year' => $year ] );
 		}
 
 		$row = $queryBuilder->fetchRow();
@@ -316,29 +261,25 @@ class SongStore {
 	}
 
 	/**
-	 * Get all unique years from song dates
+	 * Get all unique years from indexed song_year column
 	 */
 	public function getYears(): array {
 		$dbr = $this->dbProvider->getReplicaDatabase();
 
+		// Uses indexed song_year column - returns only unique years, not 5000 rows
 		$result = $dbr->newSelectQueryBuilder()
-			->select( 'song_date' )
+			->select( 'song_year' )
 			->distinct()
 			->from( 'sarkarverse_songs' )
-			->where( $dbr->expr( 'song_date', '!=', '' ) )
+			->where( $dbr->expr( 'song_year', '!=', '' ) )
+			->orderBy( 'song_year', 'ASC' )
 			->caller( __METHOD__ )
 			->fetchResultSet();
 
 		$years = [];
 		foreach ( $result as $row ) {
-			// Extract year from date string (assuming format like "1982-09-14" or "14 September 1982")
-			if ( preg_match( '/(\d{4})/', $row->song_date, $matches ) ) {
-				$years[$matches[1]] = true;
-			}
+			$years[] = $row->song_year;
 		}
-
-		$years = array_keys( $years );
-		sort( $years );
 
 		return $years;
 	}

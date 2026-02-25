@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\SarkarverseSong\Special;
 
+use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Extension\SarkarverseSong\SongStore;
 use MediaWiki\Html\Html;
 use MediaWiki\SpecialPage\SpecialPage;
@@ -10,10 +11,12 @@ use MediaWiki\Title\Title;
 class SpecialSarkarverseSongs extends SpecialPage {
 
 	private SongStore $songStore;
+	private LinkBatchFactory $linkBatchFactory;
 
-	public function __construct( SongStore $songStore ) {
+	public function __construct( SongStore $songStore, LinkBatchFactory $linkBatchFactory ) {
 		parent::__construct( 'SarkarverseSongs' );
 		$this->songStore = $songStore;
+		$this->linkBatchFactory = $linkBatchFactory;
 	}
 
 	/**
@@ -175,6 +178,20 @@ class SpecialSarkarverseSongs extends SpecialPage {
 			return Html::element( 'p', [ 'class' => 'sarkarverse-no-songs' ], $this->msg( 'sarkarversesong-no-songs' )->text() );
 		}
 
+		// Batch check page existence for all song titles (ONE query)
+		$linkBatch = $this->linkBatchFactory->newLinkBatch();
+		$titleObjects = [];
+		foreach ( $songs as $song ) {
+			if ( $song['title'] !== '' ) {
+				$titleObj = Title::newFromText( $song['title'] );
+				if ( $titleObj ) {
+					$linkBatch->addObj( $titleObj );
+					$titleObjects[$song['title']] = $titleObj;
+				}
+			}
+		}
+		$linkBatch->execute();
+
 		$html = Html::openElement( 'table', [ 'class' => 'wikitable sortable sarkarverse-songs-table' ] );
 
 		// Header row
@@ -196,15 +213,18 @@ class SpecialSarkarverseSongs extends SpecialPage {
 			$html .= Html::element( 'td', [], $song['number'] );
 			$html .= Html::element( 'td', [], $song['date'] );
 
-			// Title with link
+			// Title with link (uses cached existence check)
 			$titleCell = '';
-			if ( $song['title'] !== '' ) {
-				$title = Title::newFromText( $song['title'] );
-				if ( $title ) {
-					$titleCell = Html::element( 'a', [ 'href' => $title->getLocalURL() ], $song['title'] );
-				} else {
-					$titleCell = htmlspecialchars( $song['title'] );
+			if ( $song['title'] !== '' && isset( $titleObjects[$song['title']] ) ) {
+				$titleObj = $titleObjects[$song['title']];
+				// Add 'new' class for non-existent pages (red links)
+				$attrs = [ 'href' => $titleObj->getLocalURL() ];
+				if ( !$titleObj->exists() ) {
+					$attrs['class'] = 'new';
 				}
+				$titleCell = Html::element( 'a', $attrs, $song['title'] );
+			} elseif ( $song['title'] !== '' ) {
+				$titleCell = htmlspecialchars( $song['title'] );
 			}
 			$html .= Html::rawElement( 'td', [], $titleCell );
 

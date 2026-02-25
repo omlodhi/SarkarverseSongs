@@ -74,3 +74,41 @@
 .sarkarverse-pagination-next:hover {
 	background: #eaecf0;
 }
+
+/* Songlist parser function styles */
+.sarkarverse-songlist-container {
+	margin: 1em 0;
+}
+
+.sarkarverse-songlist-filters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1em;
+	align-items: center;
+	margin-bottom: 1em;
+	padding: 0.75em 1em;
+	background: #f8f9fa;
+	border: 1px solid #a2a9b1;
+	border-radius: 2px;
+}
+
+.sarkarverse-songlist-filters label {
+	font-weight: bold;
+}
+
+.sarkarverse-songlist-filters select {
+	min-width: 150px;
+	padding: 0.4em 0.5em;
+	border: 1px solid #a2a9b1;
+	border-radius: 2px;
+}
+
+.sarkarverse-song-count {
+	margin-left: auto;
+	color: #54595d;
+	font-style: italic;
+}
+
+.sarkarverse-songlist {
+	margin-top: 0;
+}

@@ -18,6 +18,11 @@
 				"options": { "length": 20, "notnull": true }
 			},
 			{
+				"name": "song_year",
+				"type": "string",
+				"options": { "length": 4, "notnull": true, "default": "" }
+			},
+			{
 				"name": "song_title",
 				"type": "string",
 				"options": { "length": 255, "notnull": true }
@@ -61,6 +66,10 @@
 			{
 				"name": "idx_song_language",
 				"columns": [ "song_language" ]
+			},
+			{
+				"name": "idx_song_year",
+				"columns": [ "song_year" ]
 			},
 			{
 				"name": "idx_song_page_id",
